@@ -1,0 +1,26 @@
+/*
+Responsible for Most Customers
+
+
+Last Updated: July 2025
+
+Medium
+ID 2108
+
+Each Employee is assigned one territory and is responsible for the Customers from this territory. There may be multiple employees assigned to the same territory.
+Write a query to get the Employees who are responsible for the maximum number of Customers. Output the Employee ID and the number of Customers.
+
+Tables
+map_employee_territory
+map_customer_territory
+*/
+With cutomers_per_employee AS
+(
+    select et.empl_id , COUNT(ct.cust_id)  as n_customer
+    from map_employee_territory et 
+    JOIN map_customer_territory ct on et.territory_id = ct.territory_id
+    group by et.empl_id 
+)
+select  empl_id , n_customer
+from cutomers_per_employee
+WHERE n_customer = (SELECT MAX(n_customer) from cutomers_per_employee )
